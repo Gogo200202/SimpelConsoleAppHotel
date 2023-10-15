@@ -26,7 +26,7 @@ public class DataBase implements DataBaseOperation {
     @Override
     public String readOneLine(String where,int line) {
         try {
-            return Files.readAllLines(Paths.get("./src/com/database/",where)).get(line);
+            return Files.readAllLines(Paths.get("./src/com/database/",where).toAbsolutePath()).get(line);
         }catch (Exception e){
 
         }
@@ -36,7 +36,8 @@ public class DataBase implements DataBaseOperation {
 
     @Override
     public List<String> readAll(String where) {
-        Path myPath = Paths.get("./src/com/database/",where);
+
+        Path myPath = Paths.get("./src/com/database/",where).toAbsolutePath();
 
         try {
             List<String> a=Files.readAllLines(myPath, StandardCharsets.UTF_8);
@@ -49,7 +50,7 @@ public class DataBase implements DataBaseOperation {
 
     @Override
     public void write(String where,List<String> allLines ) {
-        Path myPath = Paths.get("./src/com/database/",where);
+        Path myPath = Paths.get("./src/com/database/",where).toAbsolutePath();
         try {
             Files.write(myPath, allLines, StandardCharsets.UTF_8);
         }catch (Exception e){
