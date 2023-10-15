@@ -132,11 +132,12 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
         return allAvailabelRooms;
     }
     @Override
-    public void booking(int roomNumber){
+    public void booking(int roomNumber,String bookingOn, String bookingEnd){
         if(chekIfRoomIsAveilabel(roomNumber)){
             System.out.printf("This room is occupied");
             return;
         }
+
         JSONObject jsonUser=(JSONObject)this.User;
        JSONArray a= (JSONArray) jsonUser.get("bookRooms");
        JSONObject room=new JSONObject();
@@ -161,6 +162,28 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
                 throw new RuntimeException(e);
             }
         }
+
+        int flor=(roomNumber/100)-1;
+        var corentRooms=this.db.readOneLine("rooms",flor);
+
+
+        try {
+            JSONArray jsonRoom=(JSONArray) parser.parse(corentRooms);
+            int indexRoom=(roomNumber%100)-1;
+           var curentRoom= (JSONObject) jsonRoom.get(indexRoom);
+           curentRoom.put("bookedOn",bookingOn);
+           curentRoom.put("bookedEnd",bookingEnd);
+            var allRooms=this.db.readAll("rooms");
+            allRooms.remove(flor);
+            allRooms.add(jsonRoom.toString());
+            this.db.write("rooms",allRooms);
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
 
     }
     @Override
@@ -195,7 +218,7 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
             try {
                 var user= (JSONObject) parser.parse(allUsers.get(i));
                 if(user.get("userName").equals(this.User.get("userName"))){
-                    System.out.printf("You boked room %d \n",roomNumber);
+                    System.out.printf("You un boked room %d \n",roomNumber);
                     allUsers.remove(i);
                     allUsers.add(this.User.toString());
                     this.db.write("users",allUsers);
@@ -206,6 +229,27 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
                 throw new RuntimeException(e);
             }
         }
+
+        int flor=(roomNumber/100)-1;
+        var corentRooms=this.db.readOneLine("rooms",flor);
+
+
+        try {
+            JSONArray jsonRoom=(JSONArray) parser.parse(corentRooms);
+            int indexRoom=(roomNumber%100)-1;
+            var curentRoom= (JSONObject) jsonRoom.get(indexRoom);
+            curentRoom.put("bookedOn","");
+            curentRoom.put("bookedEnd","");
+            var allRooms=this.db.readAll("rooms");
+            allRooms.remove(flor);
+            allRooms.add(jsonRoom.toString());
+            this.db.write("rooms",allRooms);
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
 
     }
 
@@ -221,25 +265,28 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
     }
 
 
-    public void addRoom(int flor,String Type,int CancellationFee,int RoomNumber,int PricePerNight){
+    public void addRoom(int flor,String Type,int CancellationFee,int PricePerNight){
         flor=flor-1;
+
+        JSONParser parser=new JSONParser();
+        var allRooms=this.db.readAll("rooms");
         JSONObject newRoom=new JSONObject();
         newRoom.put("Status",false);
         newRoom.put("Type",Type);
         newRoom.put("CancellationFee",CancellationFee);
-        newRoom.put("RoomNumber",RoomNumber);
         newRoom.put("PricePerNight",PricePerNight);
         newRoom.put("bookedOn","");
         newRoom.put("bookedEnd","");
 
-        var allRooms=this.db.readAll("rooms");
-        JSONParser parser=new JSONParser();
+
         try {
             JSONArray florArray=new JSONArray();
             if(flor<allRooms.size()){
                 florArray= (JSONArray) parser.parse(allRooms.get(flor));
                 allRooms.remove(flor);
             }
+            int roomNumber=((flor+1)*100)+(florArray.size()+1);
+            newRoom.put("RoomNumber",roomNumber);
 
             florArray.add(newRoom);
             allRooms.add(flor, florArray.toString());

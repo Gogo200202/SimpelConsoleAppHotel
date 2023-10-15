@@ -11,7 +11,7 @@ public interface AplicationOpetartion {
 
     Boolean chekIfRoomIsAveilabel(int roomNumber);
     public List<JSONObject> allAvailableRooms();
-    public void booking(int roomNumber);
+    public void booking(int roomNumber,String bookingOn, String bookingEnd);
 
     public void unBooking(int roomNumber);
 

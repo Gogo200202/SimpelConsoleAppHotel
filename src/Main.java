@@ -6,9 +6,10 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-           Application a=new Application();
 
+        Application a=new Application();
         Scanner sc=new Scanner(System.in);
+
         while (true){
 
             System.out.println("For login enter 1 for register enter 2:");
@@ -64,7 +65,11 @@ public class Main {
 
                 System.out.print("Enter room number: ");
                 int numberRoom=Integer.parseInt(sc.nextLine());
-                a.booking(numberRoom);
+                System.out.print("Enter start date: ");
+                String bookingOn=sc.nextLine();
+                System.out.print("Enter end date: ");
+                String bookingEnd=sc.nextLine();
+                a.booking(numberRoom,bookingOn,bookingEnd);
 
             }else if(comand.equals("3")){
 
@@ -83,33 +88,18 @@ public class Main {
             }else if(a.showCuretnUserName().equals("admin")&&comand.equals("5")){
                 System.out.println("Enter flore: ");
                 int flor=Integer.parseInt(sc.nextLine());
-                System.out.println("Enter RoomNumber: ");
-                int RoomNumber=Integer.parseInt(sc.nextLine());
                 System.out.println("Enter type: ");
                 String type=sc.nextLine();
                 System.out.println("Enter CancellationFee: ");
                 int CancellationFee=Integer.parseInt(sc.nextLine());
                 System.out.println("Enter PricePerNight: ");
                 int PricePerNight=Integer.parseInt(sc.nextLine());
-                a.addRoom(flor,type,CancellationFee,RoomNumber,PricePerNight);
+                a.addRoom(flor,type,CancellationFee,PricePerNight);
             }
-
-
 
         }
 
-
-
-
-
-
-
-
     }
-
-
-
-
 
 }
 
