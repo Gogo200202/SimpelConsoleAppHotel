@@ -1,5 +1,5 @@
 package com.database;
-import com.database.Interface.DataBaseOperation;
+import com.Interface.DataBaseOperation;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -1,22 +1,15 @@
 package com.application;
 
 import com.database.DataBase;
-import com.database.Interface.AplicationOpetartion;
-import com.database.Interface.LoginAndRegisterOperations;
-import netscape.javascript.JSObject;
+import com.Interface.AplicationOpetartion;
+import com.Interface.LoginAndRegisterOperations;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Application implements AplicationOpetartion, LoginAndRegisterOperations {
 

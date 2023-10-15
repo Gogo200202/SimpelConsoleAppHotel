@@ -1,4 +1,4 @@
-package com.database.Interface;
+package com.Interface;
 
 public interface LoginAndRegisterOperations {
     boolean login(String userName,String password);

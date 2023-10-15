@@ -1,7 +1,5 @@
-package com.database.Interface;
+package com.Interface;
 
-import netscape.javascript.JSObject;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.List;
