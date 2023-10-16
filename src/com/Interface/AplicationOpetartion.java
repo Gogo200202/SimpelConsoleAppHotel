@@ -15,6 +15,12 @@ public interface AplicationOpetartion {
 
     public void unBooking(int roomNumber);
 
+    public void addRoom(int flor,String Type,int CancellationFee,int PricePerNight);
+
+    public String showCuretnUserName();
+
     public List<String> userBookedRooms();
+
+    public  List<JSONObject> searchBy(String search,String value);
 
 }

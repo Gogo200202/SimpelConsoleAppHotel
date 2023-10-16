@@ -139,14 +139,14 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
         }
 
         JSONObject jsonUser=(JSONObject)this.User;
-       JSONArray a= (JSONArray) jsonUser.get("bookRooms");
-       JSONObject room=new JSONObject();
-       room.put("RoomNumber",roomNumber);
-       a.add(room);
+        JSONArray a= (JSONArray) jsonUser.get("bookRooms");
+        JSONObject room=new JSONObject();
+        room.put("RoomNumber",roomNumber);
+        a.add(room);
 
-       List<String> allUsers=this.db.readAll("users");
-       int i;
-       JSONParser parser=new JSONParser();
+        List<String> allUsers=this.db.readAll("users");
+        int i;
+        JSONParser parser=new JSONParser();
         for (i = 0; i <allUsers.size() ; i++) {
             try {
                 var user= (JSONObject) parser.parse(allUsers.get(i));
@@ -170,9 +170,9 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
         try {
             JSONArray jsonRoom=(JSONArray) parser.parse(corentRooms);
             int indexRoom=(roomNumber%100)-1;
-           var curentRoom= (JSONObject) jsonRoom.get(indexRoom);
-           curentRoom.put("bookedOn",bookingOn);
-           curentRoom.put("bookedEnd",bookingEnd);
+            var curentRoom= (JSONObject) jsonRoom.get(indexRoom);
+            curentRoom.put("bookedOn",bookingOn);
+            curentRoom.put("bookedEnd",bookingEnd);
             var allRooms=this.db.readAll("rooms");
             allRooms.remove(flor);
             allRooms.add(jsonRoom.toString());
@@ -201,7 +201,7 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
             try {
                 user = (JSONObject) parser.parse(a.get(j).toString());
                 if((long)user.get("RoomNumber")==roomNumber){
-                  a.remove(j);
+                    a.remove(j);
                     break;
 
                 }
@@ -264,7 +264,7 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
         return allUserRooms;
     }
 
-
+    @Override
     public void addRoom(int flor,String Type,int CancellationFee,int PricePerNight){
         flor=flor-1;
 
@@ -299,6 +299,7 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
 
     }
 
+    @Override
     public String showCuretnUserName(){
         return (String) this.User.get("userName");
     }
@@ -357,11 +358,59 @@ public class Application implements AplicationOpetartion, LoginAndRegisterOperat
             this.User=register;
             allUsers.add(register.toString());
             this.db.write("users",allUsers);
-        return true;
+            return true;
         }
 
         return false;
 
+
+    }
+
+    @Override
+    public  List<JSONObject> searchBy(String search,String value){
+
+        search=search.toLowerCase();
+        List<JSONObject>result=new ArrayList<>();
+
+        var allRoom=this.db.readAll("rooms");
+        JSONParser parser=new JSONParser();
+        for (var flor: allRoom) {
+            try {
+                JSONArray curentFolrJson=(JSONArray) parser.parse(flor);
+                if(search.equals("type")){
+                    for (var room:curentFolrJson) {
+
+                        JSONObject curentRoom=(JSONObject)room;
+                        if((boolean)curentRoom.get("Status")){
+                            continue;
+                        }
+                        if(curentRoom.get("Type").toString().equalsIgnoreCase(value)){
+                            result.add(curentRoom);
+                        }
+
+                    }
+
+                }else if(search.equals("price")){
+
+                    Integer integerPrice=Integer.parseInt(value);
+                    for (var room:curentFolrJson) {
+                        JSONObject curentRoom=(JSONObject)room;
+                        if((boolean)curentRoom.get("Status")){
+                            continue;
+                        }
+                        if((long)curentRoom.get("PricePerNight")<=integerPrice){
+                            result.add(curentRoom);
+                        }
+
+                    }
+                }
+
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return result;
 
     }
 

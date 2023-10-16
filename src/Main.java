@@ -8,6 +8,8 @@ public class Main {
     public static void main(String[] args) {
 
         Application a=new Application();
+
+
         Scanner sc=new Scanner(System.in);
 
         while (true){
@@ -46,8 +48,9 @@ public class Main {
             System.out.println("To book room pleas enter pres 2");
             System.out.println("To un book room pleas enter pres 3");
             System.out.println("To see your booked rooms pleas enter pres 4");
+            System.out.println("To search pres 5");
             if(a.showCuretnUserName().equals("admin")){
-                System.out.println("To add new room pres 5");
+                System.out.println("To add new room pres 6");
             }
 
             String comand=sc.nextLine();
@@ -85,7 +88,20 @@ public class Main {
                     System.out.println(rooms);
                 }
 
-            }else if(a.showCuretnUserName().equals("admin")&&comand.equals("5")){
+            }else if(comand.equals("5")){
+                System.out.println("Search by price or type");
+                String typeOfSearch=sc.nextLine();
+                System.out.println("What to search");
+                String valueOfSearch=sc.nextLine();
+                var resolt= a.searchBy(typeOfSearch,valueOfSearch);
+
+                for (var rooms:resolt ) {
+                    JSONObject jsonroom=(JSONObject) rooms;
+                    System.out.printf("Room number %d, Prise %d ,Type %s \n",rooms.get("RoomNumber"),rooms.get("PricePerNight"),rooms.get("Type"));
+                }
+
+            }
+            else if(a.showCuretnUserName().equals("admin")&&comand.equals("6")){
                 System.out.println("Enter flore: ");
                 int flor=Integer.parseInt(sc.nextLine());
                 System.out.println("Enter type: ");
